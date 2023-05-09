@@ -5,7 +5,7 @@ from models import (
     Book,
     engine
 )
-import
+import time
 import datetime
 import pandas as pd
 
@@ -97,6 +97,15 @@ def add_book():
         print("\nBook added successfully!")
         time.sleep(1.5)
 
+def view_books():
+    print("book.id | book.title | book.author | book.price")
+    for book in session.query(Book):
+        print(f"{book.id} | {book.title} | {book.author} | {book.price}")
+
+    Input = input("\nPress any key to return to the main menu: ")
+    if Input:
+        return
+
 def app():
     app_running = True
 
@@ -106,8 +115,8 @@ def app():
             add_book()
 
         elif choice == "2":
-            # view_books()
-            continue
+            view_books()
+
         elif choice == "3":
             # search_books()
             continue
