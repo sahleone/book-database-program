@@ -16,7 +16,7 @@ from sqlalchemy.orm import declarative_base, sessionmaker
 
 # Create DataBase
 ## Create engine
-engine = create_engine('sqlite:///books.db', echo=True)
+engine = create_engine('sqlite:///books.db', echo=False)
 
 ## Create a session
 Session = sessionmaker(bind=engine)
