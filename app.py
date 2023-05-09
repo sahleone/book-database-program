@@ -105,6 +105,93 @@ def view_books():
     Input = input("\nPress any key to return to the main menu: ")
     if Input:
         return
+    
+def menu_search():
+    while True:
+        print(
+            """
+            \nSearching Options!
+            \r1) By Author Exact
+            \r2) By Author Fuzzy
+            \r3) By Title Exact
+            \r4) By Title Fuzzy
+            """
+        )
+
+        choice = input("Which option would you like: ")
+        if choice in ["1", "2", "3", "4"]:
+            return choice
+        else:
+            print("\nPlease choose one of the options above")
+            continue
+
+
+def search_books_author(fuzzy = False):
+    # Search for a book
+    ## Get user input
+    author = input("\nPlease enter the author of the book: ")
+
+    if not fuzzy:
+        if not session.query(Book).filter(Book.author == author).first():
+            print("\nNo books found")
+            time.sleep(1.5)
+            return
+    else:
+        if not session.query(Book).filter(Book.author.like(f"%{author}%")).first():
+            print("\nNo books found")
+            time.sleep(1.5)
+            return
+    
+    ## Search for book
+    if not fuzzy:
+        books = session.query(Book)\
+            .filter(Book.author == author)
+    else:
+        books = session.query(Book)\
+            .filter(Book.author.like(f"%{author}%"))
+            
+    ## Display results
+    for book in books:
+        print(f"ID: {book.id} Title: {book.title} by {book.author}")
+
+    Input = input("\nPress any key to return to the main menu: ")
+    if Input:
+        return
+
+
+def search_books_title(fuzzy = False):
+    # Search for a book
+    ## Get user input
+    title = input("\nPlease enter the title of the book: ")
+
+    if not fuzzy:
+        if not session.query(Book).filter(Book.title == title).first():
+            print("\nNo books found")
+            time.sleep(1.5)
+            return
+    else:
+        if not session.query(Book).filter(Book.title.like(f"%{title}%")).first():
+            print("\nNo books found")
+            time.sleep(1.5)
+            return
+    
+    ## Search for book
+    if not fuzzy:
+        books = session.query(Book)\
+            .filter(Book.title == title)
+    else:
+        books = session.query(Book)\
+            .filter(Book.title.like(f"%{title}%"))
+            
+    ## Display results
+    for book in books:
+        print(f"ID: {book.id} Title: {book.title} by {book.author}")
+
+    Input = input("\nPress any key to return to the main menu: ")
+    if Input:
+        return
+
+
 
 def app():
     app_running = True
@@ -118,8 +205,21 @@ def app():
             view_books()
 
         elif choice == "3":
-            # search_books()
-            continue
+            choice_search = menu_search()
+
+            if choice_search == "1":
+                search_books_author(fuzzy=False)
+            elif choice_search == "2":
+                search_books_author(fuzzy=True)
+            elif choice_search == "3":
+                search_books_title(fuzzy=False)
+
+            elif choice_search == "4":
+                search_books_title(fuzzy=True)
+      
+   
+            
+
         elif choice == "4":
             # analysis_books()
             continue
@@ -135,7 +235,7 @@ if __name__=="__main__":
     add_csv()
     app()
 
-    for book in session.query(Book):
-        print(book)
+    # for book in session.query(Book):
+    #     print(book)
 
-    print(session.query(Book).count())
+    # print(session.query(Book).count())
