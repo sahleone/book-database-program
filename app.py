@@ -335,6 +335,37 @@ def delete_book():
         session.rollback()
         print("Book Removal Failed")
 
+def analysis_books():
+    total_books = session.query(Book).count()
+    print(f"\nTotal Books: {total_books}")
+
+    unique_authors = session.query(Book.author).distinct().count()
+    print(f"Unique Authors: {unique_authors}")
+
+    oldest_books = session.query(Book).order_by(Book.published_date).limit(1)
+    print("Oldest Book")
+    display_books(oldest_books[0])
+
+    newest_books = session.query(Book).order_by(Book.published_date.desc()).limit(1)
+    print("Newest Book")
+    display_books(newest_books[0])
+
+    highest_price = session.query(Book).order_by(Book.price.desc()).limit(1)
+    print("Highest Price")
+    display_books(highest_price[0])
+
+    lowest_price = session.query(Book).order_by(Book.price).limit(1)
+    print("Lowest Price")
+    display_books(lowest_price[0])
+
+    continue_ = input("\nPress any key to return to the main menu: ")
+
+    if continue_:
+        return
+
+
+
+
 
 def app():
     app_running = True
@@ -362,8 +393,8 @@ def app():
       
 
         elif choice == "4":
-            # analysis_books()
-            continue
+            analysis_books()
+
         elif choice == "5":
             choice_update = menu_update()
             if choice_update == "1":
@@ -372,7 +403,6 @@ def app():
             elif choice_update == "2":
                 delete_book()
                 
-            
 
         else:
             print("\nClosing the application...")
